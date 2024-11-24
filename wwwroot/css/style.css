@@ -19,7 +19,7 @@
 .pagination .page-item.active .page-link {
     color: #ffffff !important;
     background-color: var(--color-primary-custom) !important;
-    border-color: #1C5BA3#1C5BA3#1C5BA3 !important;
+    border-color: #1C5BA3 !important;
 }
 
 .validation-message {

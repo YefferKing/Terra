@@ -56,7 +56,7 @@ namespace Terra.Commons
 
 
         public const int ElementosPorPagina = 15;
-        public const int ElementosPorPaginaReportes = 20;
+        public const int ElementosPorPaginaGrid= 5;
     }
 
     public class Dia

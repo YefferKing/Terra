@@ -60,6 +60,9 @@ namespace Terra.Models.Parametrizacion.Personas
         [JsonProperty("ITEMID")]
         public string ITEMID { get; set; }
 
+        [JsonProperty("TIPOITEMID")]
+        public string TIPOITEMID { get; set; }
+
         [JsonProperty("TIPO")]
         public string TIPO { get; set; }
 
@@ -74,6 +77,10 @@ namespace Terra.Models.Parametrizacion.Personas
         public string TIPOITEMID { get; set; }
 
         [JsonProperty("DESCRIPCION")]
-        public string DESCRIPCION { get; set; }
+        public string DESCRIPITEM { get; set; }
+
+        [JsonProperty("CONTENIDO")]
+        public string CONTENIDO { get; set; }
+
     }
 }

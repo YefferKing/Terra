@@ -15,6 +15,7 @@ using Terra.Models.Parametrizacion.GrupoSanguineo;
 using Terra.Models.Parametrizacion.NivelAcademico;
 using Terra.Models.Parametrizacion.Pais;
 using Terra.Models.Parametrizacion.Personas;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Terra.Components.Pages.Parametrizacion.Personas
 {
@@ -45,7 +46,7 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
         private CargoDao _cargo { get; set; }
 
 
-        List<ItemsData> dataItem = new List<ItemsData>();
+        private List<ItemsData> dataItem = new List<ItemsData>();
 
         private LoadingModal loadingModal;
 
@@ -70,6 +71,12 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
         private bool isEditItems = false;
 
         private Modal modalItems;
+
+        private Modal confirmDelete;
+
+        private Grid<ItemsData> grid;
+
+        private string SelectId;
 
 
         protected override async void OnInitialized()
@@ -189,9 +196,76 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
             StateHasChanged();
         }
 
+        private void OnTipoItemChanged(string tipoItemId)
+        {
+            var selectedTipoItem = dataSelectTipoItems.FirstOrDefault(item => item.TIPOITEMID == tipoItemId);
+
+            if (selectedTipoItem != null)
+            {
+                dataTipoItemsForm.DESCRIPITEM = selectedTipoItem.DESCRIPITEM;
+            }
+        }
+
         private async Task GuardarModalItems()
         {
+            if (!isEditItems)
+            {
+                var nuevoItem = new ItemsData
+                {
+                    TIPOITEMID = dataTipoItemsForm.TIPOITEMID,
+                    TIPO = dataTipoItemsForm.DESCRIPITEM,
+                    CONTENIDO = dataTipoItemsForm.CONTENIDO
+                };
+
+                // Agregar directamente a dataItem, no necesitamos dataItemArray
+                dataItem.Add(nuevoItem);
+                grid.RefreshDataAsync();
+            }
+            else
+            {
+                var itemExistente = dataItem.FirstOrDefault(x => x.ITEMID == dataTipoItemsForm.TIPOITEMID);
+                if (itemExistente != null)
+                {
+                    itemExistente.TIPO = dataTipoItemsForm.DESCRIPITEM;
+                    itemExistente.CONTENIDO = dataTipoItemsForm.CONTENIDO;
+                }
+            }
+
+            await modalItems.HideAsync();
+            StateHasChanged();
+            _toast.ShowSuccess(isEditItems ? "Ítem actualizado con éxito." : "Ítem agregado con éxito.");
         }
+
+        private void ShowConfirmDelete(string id)
+        {
+            SelectId = id;
+            confirmDelete.ShowAsync();
+        }
+
+        private async Task Eliminar()
+        {
+            loadingModal.Show();
+
+            confirmDelete.HideAsync();
+
+            bool result = await _personaDao.EliminarItem(SelectId);
+
+            if (result)
+            {
+                dataItem = await _personaDao.GetAllItems(dataPersonaInsert.PERSONAID) ?? new List<ItemsData>();
+                _toast.ShowSuccess("Registro eliminado con exito.");
+            }
+            else
+            {
+                _toast.ShowError("No se ha podido eliminar el registro.");
+            }
+
+            loadingModal.Hide();
+
+            StateHasChanged();
+
+        }
+
 
     }
 }

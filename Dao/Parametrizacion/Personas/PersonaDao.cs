@@ -135,6 +135,37 @@ namespace Terra.Dao.Parametrizacion.Personas
             }
         }
 
+        public async Task<bool> EliminarItem(string id)
+        {
+
+            string query = "CALL ITEMS_DELETE(" + id + ")";
+
+            JsonDataResult response = _dbConnection.TERRA_QTConsulta(query);
+
+            if (!response.SUCCESS)
+            {
+                return false;
+            }
+
+            DataTable tabla = (DataTable)JsonConvert.DeserializeObject(response.CONTENIDO.ToString(), typeof(DataTable));
+            if (tabla != null && tabla.Rows.Count > 0)
+            {
+
+                if (Convert.ToInt32(tabla.Rows[0]["OSUCCESS"].ToString()) == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<List<ItemsData>> GetAllItems(string Id)
         {
 
