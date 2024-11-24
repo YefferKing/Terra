@@ -1,0 +1,20 @@
+.custom-table-blue[b-4oz1zo0v63] {
+    background-color: #007bff !important; /* Color de fondo azul */
+    color: white !important; /* Color del texto blanco */
+}
+
+    .custom-table-blue th[b-4oz1zo0v63],
+    .custom-table-blue td[b-4oz1zo0v63] {
+        border: 1px solid #0056b3; /* Color de borde más oscuro */
+    }
+
+    .custom-table-blue .pagination .page-link[b-4oz1zo0v63] {
+        color: white; /* Color de texto de los enlaces de paginación */
+        background-color: #0056b3; /* Color de fondo de los enlaces de paginación */
+        border-color: #0056b3; /* Borde de los enlaces de paginación */
+    }
+
+    .custom-table-blue .pagination .page-item.active .page-link[b-4oz1zo0v63] {
+        background-color: #004085; /* Color de fondo para la página activa */
+        border-color: #004085; /* Borde para la página activa */
+    }

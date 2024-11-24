@@ -1,0 +1,57 @@
+﻿<div class="container-fluid mt-2 pb-sm-0 pb-0">
+    <CompBreadcrumb route="@route" />  
+    <div style="max-width: 100%;">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="row g-3 mb-3">
+                    <fieldset class="p-0" disabled="@(!enable)">
+                        @if (Master != null)
+                        {
+                            @Master
+                        }
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        @if (ButtonsDetails != null || Details != null)
+        {
+        <div class="row mb-6">
+            @if (ButtonsDetails != null)
+            {
+            <div class="col-12 d-flex justify-content-start align-items-center p-0 pt-2 pe-2 ps-2">
+                    @ButtonsDetails
+            </div>
+            }
+            @if (Details != null)
+            {
+            <div class="col-12">
+                    @Details
+            </div>
+            }
+        </div>            
+        }
+        @if (ButtonsMaster != null)
+        {
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 d-flex justify-content-end pe-2 ps-2">
+                    @ButtonsMaster
+            </div>
+        </div>
+        }
+    </div>
+</div>
+@code {
+    [Parameter]
+    public RenderFragment Master { get; set; }
+    [Parameter]
+    public RenderFragment Details { get; set; }
+    [Parameter]
+    public RenderFragment ButtonsDetails { get; set; }
+    [Parameter]
+    public RenderFragment ButtonsMaster { get; set; }
+    [Parameter]
+    public string route { get; set; }
+    [Parameter]
+    public bool enable { get; set; } = false;
+
+}

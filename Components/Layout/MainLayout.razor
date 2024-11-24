@@ -1,0 +1,26 @@
+﻿@using Terra.Components.Layout.Components
+@inherits LayoutComponentBase
+@inject IToastService toast
+<div id="page" class="page">
+    <NavMenu />    
+    <div id="right-panel" class="main-content">
+        @*<HeaderMenu/>*@
+        <div class="body-content-main">
+            @Body
+            @* <ErrorBoundary Context="Exception">
+                <ChildContent>
+                    @Body
+                </ChildContent>
+                <ErrorContent>
+                    <ErrorComponent ex="Exception" />
+                </ErrorContent>
+            </ErrorBoundary> *@
+        </div>
+    </div>
+</div>
+
+@* <div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div> *@

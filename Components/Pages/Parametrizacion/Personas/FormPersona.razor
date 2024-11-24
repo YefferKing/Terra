@@ -1,0 +1,298 @@
+﻿@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@page "/Parametrizacion/Tablas/Personas/{personaId}"
+@inherits LayoutComponentBase
+@using Terra.Components.Layout.Components
+@using Terra.Models.Parametrizacion.Personas
+@using ItemsGrid= Terra.Models.Parametrizacion.Personas.ItemsData;
+
+
+<div class="container-fluid mt-2 pb-sm-0 pb-5">
+    <div class="mt-3" style="margin-left: 5px; margin-right:5px;">
+        <nav class="mb-2" aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">Parametrizacion</li>
+                <li class="breadcrumb-item">Tablas</li>
+                <li class="breadcrumb-item"><a href="/Parametrizacion/Tablas/Personas">Personas</a></li>
+                <li class="breadcrumb-item active">@(personaId == "0" ? "Insertar" : "Editar")</li>
+            </ol>
+        </nav>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <EditForm EditContext="editContextForm">
+                            <DataAnnotationsValidator />
+                            <div class="row g-2">
+                                <!-- Primera fila -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputText class="form-control text-uppercase"
+                                                   name="Documento"
+                                                   placeholder="Documento"
+                                                   @bind-Value="dataPersonaForm.DOCUMENTO">
+                                        </InputText>
+                                        <label for="Documento">Documento</label>
+                                        <ValidationMessage For="@(() => dataPersonaForm.DOCUMENTO)" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputText class="form-control text-uppercase"
+                                                   name="Nombre"
+                                                   placeholder="Nombres"
+                                                   @bind-Value="dataPersonaForm.NOMBRES">
+                                        </InputText>
+                                        <label for="Nombres">Nombres</label>
+                                        <ValidationMessage For="@(() => dataPersonaForm.NOMBRES)" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputText class="form-control text-uppercase"
+                                                   name="Apellidos"
+                                                   placeholder="Apellidos"
+                                                   @bind-Value="dataPersonaForm.APELLIDOS">
+                                        </InputText>
+                                        <label for="Apellidos">Apellidos</label>
+                                        <ValidationMessage For="@(() => dataPersonaForm.APELLIDOS)" />
+                                    </div>
+                                </div>
+
+                                <!-- Segunda fila -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputSelect class="form-select" name="pais"
+                                                     @bind-Value="dataPersonaForm.PAISID">
+                                            <option selected disabled value="">Seleccione...</option>
+                                            @foreach (var pais in dataSelectPais)
+                                            {
+                                                <option value='@pais.PAISID'>@pais.PAIS</option>
+                                            }
+                                        </InputSelect>
+                                        <label>País</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputText class="form-control text-uppercase"
+                                                   name="Direccion"
+                                                   placeholder="Direccion"
+                                                   @bind-Value="dataPersonaForm.RESIDENCIA">
+                                        </InputText>
+                                        <label for="Direccion">Dirección</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputDate class="form-control"
+                                                   @bind-Value="dataPersonaForm.FECHANACIMIENTO"
+                                                   @bind-Value:after="@(() => CalcularEdad(dataPersonaForm.FECHANACIMIENTO))" />
+                                        <label for="fechaNacimiento">Fecha Nacimiento</label>
+                                    </div>
+                                </div>
+
+                                <!-- Tercera fila -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputNumber class="form-control text-uppercase"
+                                                     name="edad"
+                                                     placeholder="edad"
+                                                     @bind-Value="dataPersonaForm.edad"
+                                                     readonly>
+                                        </InputNumber>
+                                        <label for="Edad">Edad</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputSelect class="form-select" name="TIPOSANGRE"
+                                                     @bind-Value="dataPersonaForm.TIPOSANGRE">
+                                            <option selected disabled value="">Seleccione...</option>
+                                            @foreach (var grupo in dataSelectGrupoSanguineo)
+                                            {
+                                                <option value='@grupo.GRUPOSANGUINEOID'>@grupo.TIPOSANGRE</option>
+                                            }
+                                        </InputSelect>
+                                        <label>Grupo Sanguíneo</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputSelect class="form-select" name="NIVELACADEMICOID"
+                                                     @bind-Value="dataPersonaForm.NIVELACADEMICOID">
+                                            <option selected disabled value="">Seleccione...</option>
+                                            @foreach (var academico in dataSelectAcademico)
+                                            {
+                                                <option value='@academico.NIVELACADEMICOID'>@academico.NIVELACADEMICO</option>
+                                            }
+                                        </InputSelect>
+                                        <label>Nivel Académico</label>
+                                    </div>
+                                </div>
+
+                                <!-- Cuarta fila -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputSelect class="form-select" name="CARGO"
+                                                     @bind-Value="dataPersonaForm.CODCARGO">
+                                            <option selected disabled value="">Seleccione...</option>
+                                            @foreach (var cargo in dataSelectCargo)
+                                            {
+                                                <option value='@cargo.CODIGO'>@cargo.DESCRIPCION</option>
+                                            }
+                                        </InputSelect>
+                                        <label>Cargo</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-floating">
+                                        <InputDate class="form-control" @bind-Value="dataPersonaForm.FECHAINNGRESO" />
+                                        <label for="FECHAINNGRESO">Fecha Ingreso</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </EditForm>
+
+                        <div class="row mt-0">
+                            <div class="col-md-12 mb-4">
+                                <GridComponent MostrarSearchComponent="false">
+
+                                    <TableHeader>
+                                        <div class="row w-100 m-0">
+                                            <div class="col-12 p-0 d-flex align-items-center justify-content-between">
+                                                <div class="buttons ms-auto">
+                                                    <button class="button-icon" @onclick="showModal">
+                                                        <i class="bi bi-plus-lg fs-3"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </TableHeader>
+                                   
+                                    <Table>
+                                        <Grid TItem="ItemsGrid"
+                                              Class="table rounded mt-2 custom-table-bootstrap"
+                                              Data="dataItem"
+                                              Responsive="true"
+                                              AllowPaging="false"
+                                              AllowRowClick="true"
+                                              PageSize="Constants.ElementosPorPagina"
+                                              EmptyText="No se encontraron registros.">
+
+                                            <GridColumn TItem="ItemsGrid" HeaderText="TIPO" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                                                @context.TIPO
+                                            </GridColumn>
+
+                                            <GridColumn TItem="ItemsGrid" HeaderText="DESCRIPCION" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                                                @context.CONTENIDO
+                                            </GridColumn>
+
+                                        </Grid>
+                                    </Table>
+
+                                </GridComponent>
+                            </div>
+                        </div>
+                        <!-- Botón guardar -->
+                        <div class="row mt-3">
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="button" @onclick="GuardarPersona" class="btn btn-primary">
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<Modal @ref="modalItems" Size="ModalSize.Large" ShowCloseButton="false">
+    <BodyTemplate>
+        <EditForm OnValidSubmit="GuardarModalItems" Model="@dataTipoItemsForm">
+            <div class="row">
+               
+                <div class="col-6">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            <InputSelect class="form-select" name="CARGO"
+                                         @bind-Value="dataTipoItemsForm.TIPOITEMID">
+                                <option selected disabled value="">Seleccione...</option>
+                                @foreach (var tipoItem in dataSelectTipoItems)
+                                {
+                                    <option value='@tipoItem.TIPOITEMID'>@tipoItem.DESCRIPCION</option>
+                                }
+                            </InputSelect>
+                            <label>Cargo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            <InputText class="form-control text-uppercase"
+                                       name="Descripcion"
+                                       placeholder="Direccion"
+                                       @bind-Value="dataTipoItemsForm.DESCRIPCION">
+                            </InputText>
+                            <label for="Descripcion">Descripcion</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" style="margin-top: 1rem;">
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary-custom">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </BodyTemplate>
+</Modal>
+
+
+<BlazoredToasts Position="Blazored.Toast.Configuration.ToastPosition.BottomCenter"
+                Timeout="5"
+                IconType="Blazored.Toast.Configuration.IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa fa-bug"
+                WarningIcon="fa fa-warning"
+                InfoIcon="fa fa-info-circle">
+</BlazoredToasts>
+
+<LoadingModal @ref="loadingModal" />
+
+<style>
+    .button-icon {
+        width: 40px;
+        height: 40px;
+        background: none;
+        outline: none;
+        border: 1px solid transparent; /* Siempre define un borde para evitar cambios */
+        padding: 12px;
+        border-radius: 50%;
+        color: var(--color-texto);
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Asegúrate de centrar el contenido */
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s; /* Animaciones suaves */
+    }
+
+        .button-icon:hover {
+            background-color: rgba(0, 0, 0, 0.1); /* Cambia el fondo */
+            border: 1px solid rgba(0, 0, 0, 0.1); /* Define el borde en hover */
+            /*transform: scale(1.05);*/ /* Opcional: Pequeña ampliación */
+        }
+
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+</style>

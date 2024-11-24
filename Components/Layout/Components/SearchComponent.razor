@@ -1,0 +1,58 @@
+﻿<input @ref="inputSearch" @bind="searchText" @bind:event="oninput" @onkeyup="OnKeyUpSearchBox" type="search" class="form-control"
+       placeholder="@( string.IsNullOrEmpty(PlaceHolder) ? "Buscar" : PlaceHolder )" aria-label="Search" />
+
+@code {
+
+    [Parameter]
+    public EventCallback<string> SearchMethod { get; set; }
+
+    [Parameter]
+    public string PlaceHolder { get; set; }
+
+    [Parameter]
+    public int Delay { get; set; } = 1000;
+
+    ElementReference inputSearch;
+
+    private CancellationTokenSource searchCancellationTokenSource;
+    private string searchText;
+
+    private async Task OnKeyUpSearchBox(KeyboardEventArgs e)
+    {
+        string tipo = e.Type;
+
+        searchCancellationTokenSource?.Cancel();
+        searchCancellationTokenSource = new CancellationTokenSource();
+
+        var cancellationToken = searchCancellationTokenSource.Token;
+
+        try
+        {
+            // Espera 500 milisegundos antes de realizar la búsqueda
+            await Task.Delay(Delay, cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            StateHasChanged();
+
+            await SearchMethod.InvokeAsync(searchText);
+        }
+        catch (OperationCanceledException)
+        {
+            // Maneja la cancelación de la tarea si es necesario
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    public async Task Focus() => await inputSearch.FocusAsync();
+
+    public async Task Limpiar() => searchText = "";
+
+    public async Task SetPlaceHolder(string placeHolder)
+    {
+        searchText = placeHolder;
+        StateHasChanged();
+    } 
+}

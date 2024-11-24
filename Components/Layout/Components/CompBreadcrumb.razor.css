@@ -1,0 +1,9 @@
+﻿.breadcrumb-item a{
+   color: var( --bs-breadcrumb-item-active-color) !important;
+   text-decoration: underline;
+
+}
+
+   .breadcrumb-item.active a{
+      text-decoration: none;
+   }

@@ -1,0 +1,87 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Terra
+build_property.RootNamespace = Terra
+build_property.ProjectDir = C:\Users\YEFFERSON\Documents\Terra\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\YEFFERSON\Documents\Terra
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/Components/CompMasterDetail.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcQ29tcG9uZW50c1xDb21wTWFzdGVyRGV0YWlsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/Components/ErrorComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcQ29tcG9uZW50c1xFcnJvckNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/Components/LoadingModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcQ29tcG9uZW50c1xMb2FkaW5nTW9kYWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/Components/SearchComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcQ29tcG9uZW50c1xTZWFyY2hDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/GridComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcR3JpZENvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/Modulos/Tablas.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTW9kdWxvc1xUYWJsYXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Pages/Home/DashBoard.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lXERhc2hCb2FyZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/AccesoLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcQWNjZXNvTGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-fe9ny0ncer
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Layout/Components/CompBreadcrumb.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcQ29tcG9uZW50c1xDb21wQnJlYWRjcnVtYi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-uomhizm7hs
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Pages/Acceso/Acceso.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2Nlc29cQWNjZXNvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-c2xihi78uf
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Pages/Parametrizacion/Personas/FormPersona.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQYXJhbWV0cml6YWNpb25cUGVyc29uYXNcRm9ybVBlcnNvbmEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-ysw5apbnkr
+
+[C:/Users/YEFFERSON/Documents/Terra/Components/Pages/Parametrizacion/Personas/GridPersona.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQYXJhbWV0cml6YWNpb25cUGVyc29uYXNcR3JpZFBlcnNvbmEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-4oz1zo0v63

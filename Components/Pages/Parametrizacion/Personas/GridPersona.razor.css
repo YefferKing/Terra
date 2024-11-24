@@ -1,0 +1,20 @@
+﻿.custom-table-blue {
+    background-color: #007bff !important; /* Color de fondo azul */
+    color: white !important; /* Color del texto blanco */
+}
+
+    .custom-table-blue th,
+    .custom-table-blue td {
+        border: 1px solid #0056b3; /* Color de borde más oscuro */
+    }
+
+    .custom-table-blue .pagination .page-link {
+        color: white; /* Color de texto de los enlaces de paginación */
+        background-color: #0056b3; /* Color de fondo de los enlaces de paginación */
+        border-color: #0056b3; /* Borde de los enlaces de paginación */
+    }
+
+    .custom-table-blue .pagination .page-item.active .page-link {
+        background-color: #004085; /* Color de fondo para la página activa */
+        border-color: #004085; /* Borde para la página activa */
+    }

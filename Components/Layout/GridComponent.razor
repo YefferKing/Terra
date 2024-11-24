@@ -1,0 +1,126 @@
+﻿<div class="container-fluid pb-sm-0 pb-0">
+    <div class="row ">
+        @*d-flex align-items-start flex-column flex-md-row align-items-md-center gap-2*@
+        <div class="col-sm-12 col-md-5 col-lg-6 d-flex align-items-center">
+            <nav class="mb-0 p-0 " aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    @{
+                        if (!string.IsNullOrEmpty(route))
+                        {
+                            foreach (string ruta in route.Split("/"))
+                            {
+                                <li class="breadcrumb-item active">@ruta</li>
+                            }
+                        }
+                    }
+                </ol>
+            </nav>
+        </div>
+        <div class="col-sm-12 col-md-7 col-lg-6 mt-sm-4 mt-md-0 align-items-center">
+            <div class="d-flex justify-content-end flex-grow-0 w-100 gap-2 flex-sm-row flex-column w-100">
+                @if (TableHeader != null)
+                {
+                    <div class="align-content-center d-flex justify-content-end mt-1">
+                        @TableHeader
+
+                        @if(!MostrarSearchComponent && Filtrar){
+                            <div class="d-flex ml-2">
+                                <a class="p-0 cursor-pointer align-content-center" @onclick="() => FilterMethod.InvokeAsync()"><i class="bi bi-funnel" style="font-size: 20px;"></i></a>
+                            </div>
+                        }
+                    </div>
+                }
+                @{
+                    <div class="d-grid justify-content-end gap-1" style="grid-template-columns: 1fr auto;">
+
+                        @if(MostrarSearchComponent){
+                            <SearchComponent SearchMethod="SearchMethod" />
+                        
+                            @if (Filtrar)
+                            {
+                                <div class="d-flex">
+                                    <a class="p-0 cursor-pointer align-content-center" @onclick="() => FilterMethod.InvokeAsync()"><i class="bi bi-funnel" style="font-size: 20px;"></i></a>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2 pb-sm-0">
+        <div class="">
+            <div class="col-md-12 p-0">
+                <div class="table-responsive scrollbar p-0">
+                    @if (PermisoVer)
+                    {
+                        @Table
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<int> itemsMethod { get; set; }
+    [Parameter]
+    public EventCallback<string> SearchMethod { get; set; }
+    [Parameter]
+    public EventCallback FilterMethod { get; set; }
+    [Parameter]
+    public bool Filtrar { get; set; } = false;
+    [Parameter]
+    public RenderFragment TableHeader { get; set; }
+    [Parameter]
+    public RenderFragment Table { get; set; }
+    [Parameter]
+    public string route { get; set; }
+    [Parameter]
+    public bool PermisoVer { get; set; } = true;
+    [Parameter]
+    public bool MostrarSearchComponent { get; set; } = true;
+
+    private CancellationTokenSource searchCancellationTokenSource;
+    private string searchText;
+    private List<string> routes = new List<string>();
+
+    private void ChangeItemsPerPage(ChangeEventArgs e)
+    {
+        int itemsPerPage = int.Parse(e.Value.ToString());
+        itemsMethod.InvokeAsync(itemsPerPage);
+    }
+
+    private async Task OnKeyUpSearchBox(KeyboardEventArgs e)
+    {
+        string tipo = e.Type;
+
+        searchCancellationTokenSource?.Cancel();
+        searchCancellationTokenSource = new CancellationTokenSource();
+
+        var cancellationToken = searchCancellationTokenSource.Token;
+
+        try
+        {
+            // Espera 500 milisegundos antes de realizar la búsqueda
+            await Task.Delay(1000, cancellationToken);
+
+            // Verifica si esta operación de búsqueda ha sido cancelada
+            cancellationToken.ThrowIfCancellationRequested();
+
+            StateHasChanged();
+
+            await SearchMethod.InvokeAsync(searchText);
+        }
+        catch (OperationCanceledException)
+        {
+            // Maneja la cancelación de la tarea si es necesario
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+}

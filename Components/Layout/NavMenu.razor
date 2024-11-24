@@ -1,0 +1,31 @@
+﻿@using Terra.Components.Layout.Modulos
+@rendermode @(new InteractiveServerRenderMode(prerender: true))
+
+<aside id="left-panel" class="sidebar">  
+    <nav>
+        <div class="sidebar-content">
+            <div class="navbar-header">
+                <form class="button-collapse-sidebar">
+                    <label for="checkbox-menu-toggle">
+                        <i class="bi bi-list"></i>
+                    </label>
+                    <input type="checkbox" name="checkbox-menu-toggle" class="checkbox-menu-toggle"
+                        id="checkbox-menu-toggle">
+                </form>
+                <a href="/Dashboard">
+                    <picture>
+                        <img src="/img/terra.png" class="logotipo">
+                        <img src="/img/logotipo (2).png" class="logo">
+                    </picture>
+                </a>
+            </div>
+            <div class="menu-custom">
+                <ul class="navbar-custom">
+                        <Tablas />
+                       
+                </ul>
+            </div>
+        </div>
+       
+    </nav>
+</aside>

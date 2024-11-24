@@ -1,0 +1,27 @@
+﻿
+<BlazoredToasts Position="Blazored.Toast.Configuration.ToastPosition.BottomCenter"
+                Timeout="5"
+                IconType="Blazored.Toast.Configuration.IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa fa-bug"
+                WarningIcon="fa fa-warning"
+                InfoIcon="fa fa-info-circle">
+</BlazoredToasts>
+
+@code {
+
+    [Inject]
+    private IToastService _toast { get; set; }
+
+    [Parameter]
+    public Exception ex { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+        {
+            _toast.ShowError("Ha ocurrido una excepción no controlada.");        
+        }
+    }
+}

@@ -1,0 +1,39 @@
+﻿@if (navitems != null)
+{
+    <div class="mb-0 p-0">
+        <Breadcrumb Items="navitems" />
+    </div>
+}
+else
+{
+    <nav class="mb-0 p-0" aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+            @{
+                if (routes != null && routes.Count > 0)
+                {
+                    foreach (string ruta in routes)
+                    {
+                        <li class="breadcrumb-item active">@ruta</li>
+                    }
+
+                }
+            }
+        </ol>
+    </nav>
+}
+
+
+@code{
+    [Parameter]
+    public string route { get; set; } = null;
+    [Parameter]
+    public List<BreadcrumbItem> navitems { get; set; } = null;
+
+    private List<string> routes = new List<string>();
+
+    protected override async void OnInitialized()
+    {
+        if(route != null)
+            routes = route.Split("/").ToList();
+    }
+}

@@ -1,0 +1,59 @@
+﻿@page "/DashBoard"
+
+@inherits LayoutComponentBase
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject NavigationManager navigationManager
+@inject IToastService _toast
+@inject IJSRuntime JSRuntime
+
+<HeadContent>
+    <PageTitle>DashBoard</PageTitle>
+</HeadContent>
+
+<div class="container-fluid mt-2 pb-sm-0 pb-5">
+    <!-- Aquí va el contenido de tu Dashboard -->
+</div>
+
+<BlazoredToasts Position="Blazored.Toast.Configuration.ToastPosition.BottomCenter" Timeout="5"
+                IconType="Blazored.Toast.Configuration.IconType.FontAwesome" SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up" ErrorIcon="fa fa-bug" WarningIcon="fa fa-warning" InfoIcon="fa fa-info-circle"
+                RemoveToastsOnNavigation="false">
+</BlazoredToasts>
+
+@code {
+    private string url;
+    private const string DashBoardMensajeKey = "DASHBOARDMENSAJE";
+    private const string SessionKey = "user_session_valid"; // Clave para verificar si la sesión es válida
+
+    protected override void OnInitialized()
+    {
+        url = navigationManager.Uri;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Recuperar la clave de sesión como cadena y validarla como booleano
+            var sessionValidString = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", SessionKey);
+            var sessionValid = !string.IsNullOrEmpty(sessionValidString) && bool.TryParse(sessionValidString, out var isValid) && isValid;
+
+            if (!sessionValid)
+            {
+                // Redirigir si la sesión no es válida
+                navigationManager.NavigateTo("/login");
+                return;
+            }
+
+            // Recuperar el mensaje del dashboard
+            var dashBoardMensaje = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", DashBoardMensajeKey);
+
+            if (!string.IsNullOrEmpty(dashBoardMensaje))
+            {
+                await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", DashBoardMensajeKey);
+            }
+        }
+    }
+
+}
+
