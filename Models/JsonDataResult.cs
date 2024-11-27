@@ -7,7 +7,7 @@ namespace Terra.Models
         [JsonProperty("OSUCCESS")]
         public bool SUCCESS { get; set; }
         [JsonProperty("RESPONSE")]
-        public object CONTENIDO { get; set; }
+        public string CONTENIDO { get; set; } = "";
     }
 
 }

@@ -53,7 +53,7 @@ namespace Terra.Dao.Parametrizacion.Personas
             return null;
         }
 
-        public async Task<bool> InsertarPersona(PersonaData persona)
+        public async Task<JsonDataResult> InsertarPersona(PersonaData persona)
         {
 
             
@@ -62,46 +62,17 @@ namespace Terra.Dao.Parametrizacion.Personas
 
             JsonDataResult json =  _dbConnection.TERRA_QTConsulta(query);
 
-            if (!json.SUCCESS)
-            {
-                return false;
-            }
-
-            DataTable table = (DataTable)JsonConvert.DeserializeObject(json.CONTENIDO.ToString(), typeof(DataTable));
-
-            if (table == null || table.Rows.Count == 0)
-            {
-                return false;
-            }
-
-            int success = Convert.ToInt32(table.Rows[0]["OSUCCESS"].ToString());
-
-            return success == 1;
+            return json;
         }
 
-        public async Task<bool> ActualizarPersona(PersonaData persona)
+        public async Task<JsonDataResult> ActualizarPersona(PersonaData persona)
         {
 
             string query = $"CALL PERSONA_UPDATE('{persona.PERSONAID}','{persona.DOCUMENTO}','{persona.NOMBRES}','{persona.APELLIDOS}','{persona.PAISID}'," +
                 $"'{persona.RESIDENCIA}','{Helpers.formatFecha(persona.FECHANACIMIENTO, "yyyy/MM/dd")}','{persona.TIPOSANGRE}','{persona.NIVELACADEMICOID}','{persona.CODCARGO}','{Helpers.formatFecha(persona.FECHAINNGRESO, "yyyy/MM/dd")}')";
             
             JsonDataResult json = _dbConnection.TERRA_QTConsulta(query);
-
-            if (!json.SUCCESS)
-            {
-                return false;
-            }
-
-            DataTable table = (DataTable)JsonConvert.DeserializeObject(json.CONTENIDO.ToString(), typeof(DataTable));
-
-            if (table == null || table.Rows.Count == 0)
-            {
-                return false;
-            }
-
-            int success = Convert.ToInt32(table.Rows[0]["OSUCCESS"].ToString());
-
-            return success == 1;
+            return json;
         }
 
         public async Task<bool> EliminarPersona(string id)
@@ -208,6 +179,18 @@ namespace Terra.Dao.Parametrizacion.Personas
             }
 
             return tipoItems;
+        }
+
+        public async Task<JsonDataResult> InsertarItems(ItemsData items)
+        {
+
+
+            string query = $"CALL ITEMS_CREATE('{items.PERSONAID}','{items.TIPOITEMID}','{items.CONTENIDO}')";
+                
+
+            JsonDataResult json = _dbConnection.TERRA_QTConsulta(query);
+
+            return json;
         }
     }
 }

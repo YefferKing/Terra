@@ -3,6 +3,7 @@ using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
+using System.Data;
 using Terra.Commons;
 using Terra.Components.Layout.Components;
 using Terra.Dao.Parametrizacion.Cargos;
@@ -10,6 +11,7 @@ using Terra.Dao.Parametrizacion.GrupoSanguineo;
 using Terra.Dao.Parametrizacion.NivelAcademico;
 using Terra.Dao.Parametrizacion.Pais;
 using Terra.Dao.Parametrizacion.Personas;
+using Terra.Models;
 using Terra.Models.Parametrizacion.Cargos;
 using Terra.Models.Parametrizacion.GrupoSanguineo;
 using Terra.Models.Parametrizacion.NivelAcademico;
@@ -133,16 +135,37 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
             if (personaId.Equals("0"))
             {
 
-                bool insertoPersona = await _personaDao.InsertarPersona(dataPersonaInsert);
+                JsonDataResult json = await _personaDao.InsertarPersona(dataPersonaInsert);
 
-                if (!insertoPersona)
+                DataTable table = (DataTable)JsonConvert.DeserializeObject(json.CONTENIDO.ToString(), typeof(DataTable));
+
+                if (table == null || table.Rows.Count == 0)
+                    return;
+
+                int success = Convert.ToInt32(table.Rows[0]["OSUCCESS"].ToString());
+                string response = (string)table.Rows[0]["RESPONSE"];
+
+                if (success != 1)
                 {
-                    _toast.ShowWarning("No se inserto el registro.");
+                    _toast.ShowWarning(response);
                     loadingModal.Hide();
                     return;
                 }
 
-                _toast.ShowSuccess("Se inserto el registro.");
+                int personaId = Convert.ToInt32(table.Rows[0]["VID"].ToString());
+
+                foreach(var row in dataItem)
+                {
+                    ItemsData itemData = new ItemsData
+                    {
+                        PERSONAID = personaId.ToString(),
+                        TIPOITEMID = row.TIPOITEMID,
+                        CONTENIDO = row.CONTENIDO
+                    };
+                    JsonDataResult jsonItems = await _personaDao.InsertarItems(itemData);
+                }
+
+                _toast.ShowSuccess(response);
                 loadingModal.Hide();
                 _navigationManager.NavigateTo("/Parametrizacion/Tablas/Personas");
                 return;
@@ -150,16 +173,36 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
             else
             {
 
-                bool actualizoPersona = await _personaDao.ActualizarPersona(dataPersonaInsert);
+                JsonDataResult json = await _personaDao.ActualizarPersona(dataPersonaInsert);
 
-                if (!actualizoPersona)
+                DataTable table = (DataTable)JsonConvert.DeserializeObject(json.CONTENIDO.ToString(), typeof(DataTable));
+
+                if (table == null || table.Rows.Count == 0)
+                    return;
+
+                int success = Convert.ToInt32(table.Rows[0]["OSUCCESS"].ToString());
+                string response = (string)table.Rows[0]["RESPONSE"];
+
+                if (success != 1)
                 {
-                    _toast.ShowWarning("No se actualizo el registro.");
+                    _toast.ShowWarning(response);
                     loadingModal.Hide();
                     return;
                 }
 
-                _toast.ShowSuccess("registro actualizado con éxito");
+
+                foreach (var row in dataItem)
+                {
+                    ItemsData itemData = new ItemsData
+                    {
+                        PERSONAID = dataPersonaForm.PERSONAID,
+                        TIPOITEMID = row.TIPOITEMID,
+                        CONTENIDO = row.CONTENIDO
+                    };
+                    JsonDataResult jsonItems = await _personaDao.InsertarItems(itemData);
+                }
+
+                _toast.ShowSuccess(response);
                 loadingModal.Hide();
                 _navigationManager.NavigateTo("/Parametrizacion/Tablas/Personas");
                 return;
@@ -220,6 +263,7 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
                 // Agregar directamente a dataItem, no necesitamos dataItemArray
                 dataItem.Add(nuevoItem);
                 grid.RefreshDataAsync();
+
             }
             else
             {

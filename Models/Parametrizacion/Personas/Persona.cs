@@ -69,6 +69,8 @@ namespace Terra.Models.Parametrizacion.Personas
         [JsonProperty("CONTENIDO")]
         public string CONTENIDO { get; set; }
 
+        public string PERSONAID { get; set; }
+
     }
 
     public class TipoItemsGrid
