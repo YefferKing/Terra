@@ -260,7 +260,6 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
                     CONTENIDO = dataTipoItemsForm.CONTENIDO
                 };
 
-                // Agregar directamente a dataItem, no necesitamos dataItemArray
                 dataItem.Add(nuevoItem);
                 grid.RefreshDataAsync();
 

@@ -33,7 +33,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ConnectionString": "Server=localhost;Database=terras;User ID=root;Password=123456;Port=3306;",
+        "ConnectionString": "Server=localhost;Database=terra;User ID=root;Password=123456;Port=3306;",
         "ApiBaseUrl": "http://localhost:7269" // TerraApi
       },
       "applicationUrl": "https://localhost:7288;http://localhost:5002",
