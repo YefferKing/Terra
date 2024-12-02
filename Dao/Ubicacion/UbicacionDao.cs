@@ -1,26 +1,25 @@
 ﻿using Newtonsoft.Json;
 using Terra.Commons;
-using Terra.Models.Parametrizacion.Pais;
+using Terra.Models.Herramientas;
 using Terra.Models;
-using Terra.Models.Parametrizacion.Cargos;
 using Terra.Models.Ubicacion;
 using System.Data;
 
-namespace Terra.Dao.Parametrizacion.Cargos
+namespace Terra.Dao.Ubicacion
 {
-    public class CargoDao
+    public class UbicacionDao
     {
         private ITERRADB _dbConnection;
 
-        public CargoDao(ITERRADB dbConnection)
+        public UbicacionDao(ITERRADB dbConnection)
         {
             _dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
         }
 
-        public async Task<List<CargoData>> GetAllCargos()
+        public async Task<List<UbicacionData>> GetAllUbicacion()
         {
 
-            string query = $"CALL CARGOS_LIST()";
+            string query = $"CALL UBICACION_LIST()";
 
             JsonDataResult response = _dbConnection.TERRA_QTConsulta(query);
 
@@ -29,36 +28,36 @@ namespace Terra.Dao.Parametrizacion.Cargos
                 return null;
             }
 
-            List<CargoData> cargos = JsonConvert.DeserializeObject<List<CargoData>>(response.CONTENIDO.ToString());
+            List<UbicacionData> ubicacion = JsonConvert.DeserializeObject<List<UbicacionData>>(response.CONTENIDO.ToString());
 
-            if (cargos == null || cargos.Count == 0)
+            if (ubicacion == null || ubicacion.Count == 0)
             {
                 return null;
             }
 
-            return cargos;
+            return ubicacion;
         }
 
-        public async Task<CargoData> GetDataCargo(string id)
+        public async Task<UbicacionData> GetDataUbicacion(string id)
         {
 
-            string query = $"CALL CARGO_READ('{id}')";
+            string query = $"CALL UBICACION_READ('{id}')";
 
             JsonDataResult json = _dbConnection.TERRA_QTConsulta(query);
 
             if (json.SUCCESS)
             {
-                List<CargoData> data = (List<CargoData>)JsonConvert.DeserializeObject(json.CONTENIDO.ToString(), typeof(List<CargoData>));
+                List<UbicacionData> data = (List<UbicacionData>)JsonConvert.DeserializeObject(json.CONTENIDO.ToString(), typeof(List<UbicacionData>));
                 return data.First();
             }
 
             return null;
         }
 
-        public async Task<bool> EliminarCargo(string id)
+        public async Task<bool> EliminarUbicacion(string id)
         {
 
-            string query = "CALL CARGO_DELETE(" + id + ")";
+            string query = "CALL UBICACION_DELETE(" + id + ")";
 
             JsonDataResult response = _dbConnection.TERRA_QTConsulta(query);
 
@@ -86,28 +85,27 @@ namespace Terra.Dao.Parametrizacion.Cargos
             }
         }
 
-        public async Task<JsonDataResult> InsertarCargo(CargoData cargo)
+
+        public async Task<JsonDataResult> InsertarUbicacion(UbicacionData ubicacion)
         {
 
 
-            string query = $"CALL CARGO_CREATE('{cargo.CODIGO}','{cargo.DESCRIPCION}')";
+            string query = $"CALL UBICACION_CREATE('{ubicacion.CODIGO}','{ubicacion.DESCRIPCION}')";
 
             JsonDataResult json = _dbConnection.TERRA_QTConsulta(query);
 
             return json;
         }
 
-        public async Task<JsonDataResult> ActualizarCargo(CargoData cargo)
+        public async Task<JsonDataResult> ActualizarUbicacion(UbicacionData ubicacion)
         {
 
 
-            string query = $"CALL CARGO_UPDATE('{cargo.CARGOID}','{cargo.CODIGO}','{cargo.DESCRIPCION}')";
+            string query = $"CALL UBICACION_UPDATE('{ubicacion.UBICACIONID}','{ubicacion.CODIGO}','{ubicacion.DESCRIPCION}')";
 
             JsonDataResult json = _dbConnection.TERRA_QTConsulta(query);
 
             return json;
         }
-
-
     }
 }

@@ -1,7 +1,7 @@
 ﻿@using Terra.Components.Layout.Modulos
+@using Terra.Components.Pages.Acceso
 @rendermode @(new InteractiveServerRenderMode(prerender: true))
-
-<aside id="left-panel" class="sidebar">  
+<aside id="left-panel" class="sidebar">
     <nav>
         <div class="sidebar-content">
             <div class="navbar-header">
@@ -10,7 +10,7 @@
                         <i class="bi bi-list"></i>
                     </label>
                     <input type="checkbox" name="checkbox-menu-toggle" class="checkbox-menu-toggle"
-                        id="checkbox-menu-toggle">
+                           id="checkbox-menu-toggle">
                 </form>
                 <a href="/Dashboard">
                     <picture>
@@ -21,10 +21,37 @@
             </div>
             <div class="menu-custom">
                 <ul class="navbar-custom">
-                        <Tablas />
+                    <Tablas />
+                    <Herramientas />
+                    <Ubicacion />
+                    <Cargos />
+                    
+                </ul>
+            </div>
+        </div>
 
-                        <Herramientas/>
-                       
+        <div class='background-component @(showModalProfile ? "active" : "")' @onclick='(() => showModalProfile = false)'></div>
+        <div class="footer-custom" @onclick:stopPropagation="true">
+            <div class="content-footer" @onclick="ToggleMenu">
+                <a>
+                    <img class="img-profile"
+                         src="/img/usuario.png" />
+                </a>
+                <div class="info">
+                    <div class="detalle">
+                        <p class="name">ADMIN</p>
+                    </div>
+                </div>
+            </div>
+            <div id="modal-profile" class='modal-profile @(showModalProfile ? "active" : "")'>
+                <ul class="w-100">
+                    
+                    <hr>
+                    <li>
+                        <a class="a-item" @onclick="CerrarSesion">
+                            <i class="bi bi-power"></i>Cerrar sesión
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

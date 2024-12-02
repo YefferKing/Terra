@@ -1,0 +1,77 @@
+﻿@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@page "/Ubicacion/{ubicacionId}"
+@inherits LayoutComponentBase
+@using Terra.Components.Layout.Components
+
+
+<div class="container-fluid mt-2 pb-sm-0 pb-5">
+    <div class="mt-3" style="margin-left: 5px; margin-right:5px;">
+        <nav class="mb-2" aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/Ubicacion">Ubicacion</a></li>
+                <li class="breadcrumb-item active">@(ubicacionId == "0" ? "Insertar" : "Editar")</li>
+            </ol>
+        </nav>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <EditForm EditContext="editContextForm">
+                            <DataAnnotationsValidator />
+                            <div class="row g-2">
+                                <!-- Primera fila -->
+                                <div class="col-6 mb-3">
+                                    <div class="form-floating">
+                                        <InputText class="form-control text-uppercase"
+                                                   name="Codigo"
+                                                   placeholder="Codigo"
+                                                   @bind-Value="dataUbicacionForm.CODIGO">
+                                        </InputText>
+                                        <label for="Codigo">Codigo</label>
+                                        <ValidationMessage For="@(() => dataUbicacionForm.CODIGO)" />
+                                    </div>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <div class="form-floating">
+                                        <InputText class="form-control text-uppercase"
+                                                   name="Descripcion"
+                                                   placeholder="Descripcion"
+                                                   @bind-Value="dataUbicacionForm.DESCRIPCION">
+                                        </InputText>
+                                        <label for="Descripcion">Descripcion</label>
+                                        <ValidationMessage For="@(() => dataUbicacionForm.DESCRIPCION)" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </EditForm>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12 d-flex justify-content-end">
+                            <button type="button" @onclick="Guardar" class="btn btn-primary">
+                                Guardar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<BlazoredToasts Position="Blazored.Toast.Configuration.ToastPosition.BottomCenter"
+                Timeout="5"
+                IconType="Blazored.Toast.Configuration.IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa fa-bug"
+                WarningIcon="fa fa-warning"
+                InfoIcon="fa fa-info-circle">
+</BlazoredToasts>
+
+<LoadingModal @ref="loadingModal" />

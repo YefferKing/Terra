@@ -1,0 +1,81 @@
+﻿@page "/Cargos"
+
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+@inherits LayoutComponentBase
+
+@using CargoGrid = Terra.Models.Parametrizacion.Cargos.CargoData;
+
+<PageTitle>Cargos</PageTitle>
+
+<GridComponent route="/Cargos">
+
+    <TableHeader>
+        <button class="btn btn-primary d-inline-flex align-items-center gap-2 insert-btn" @onclick='(()=> FormCargo("0"))'>
+            <i class="bi bi-geo-alt"></i>
+            <span>Insertar</span>
+        </button>
+    </TableHeader>
+
+    <Table>
+        <Grid TItem="CargoGrid"
+              Class="table rounded mt-2 custom-table-bootstrap"
+              Data="data"
+              Responsive="true"
+              AllowPaging="true"
+              AllowRowClick="true"
+              OnRowDoubleClick="OnRowDoubleClick"
+              PageSize="Constants.ElementosPorPagina"
+              EmptyText="No se encontraron registros.">
+
+            <GridColumn TItem="CargoGrid" HeaderText="CODIGO" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.CODIGO
+            </GridColumn>
+
+            <GridColumn TItem="CargoGrid" HeaderText="DESCRIPCION" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.DESCRIPCION
+            </GridColumn>
+
+
+            <GridColumn TItem="CargoGrid" PropertyName="" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                <button class="border-0 bg-transparent" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <a @onclick="@(() => FormCargo(context.CARGOID))" style='border-radius: .25rem;' class='dropdown-item'>
+                        <i class='bi bi-pencil-square'></i> Editar
+                    </a>
+
+                    <a @onclick="@(() => ShowConfirmDelete(context.CARGOID))" style='border-radius: .25rem;' class='dropdown-item'>
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                </div>
+            </GridColumn>
+
+        </Grid>
+    </Table>
+
+</GridComponent>
+
+<Modal @ref="confirmDelete" Title="Confirmar" IsVerticallyCentered="true">
+    <BodyTemplate>
+        <p class="fs-5">¿Desea eliminar el registro?</p>
+    </BodyTemplate>
+    <FooterTemplate>
+        <button @onclick="@(()=>Eliminar())" type="submit" class="btn btn-primary-custom text-light">Aceptar</button>
+        <button @onclick="confirmDelete.HideAsync" type="button" class="btn btn-danger">Cancelar</button>
+    </FooterTemplate>
+</Modal>
+
+
+<BlazoredToasts Position="Blazored.Toast.Configuration.ToastPosition.BottomCenter"
+                Timeout="5"
+                IconType="Blazored.Toast.Configuration.IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa fa-bug"
+                WarningIcon="fa fa-warning"
+                InfoIcon="fa fa-info-circle">
+</BlazoredToasts>
+
+<LoadingModal @ref="loadingModal" />

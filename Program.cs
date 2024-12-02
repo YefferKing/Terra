@@ -11,6 +11,7 @@ using Terra.Dao.Parametrizacion.GrupoSanguineo;
 using Terra.Dao.Parametrizacion.NivelAcademico;
 using Terra.Dao.Parametrizacion.Cargos;
 using Terra.Dao.Herramientas;
+using Terra.Dao.Ubicacion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddScoped<GrupoSanguineoDao>();
 builder.Services.AddScoped<NivelAcademicoDao>();
 builder.Services.AddScoped<CargoDao>();
 builder.Services.AddScoped<HerramientaDao>();
+builder.Services.AddScoped<UbicacionDao>();
 builder.Services.AddScoped<IToastService, ToastService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 
