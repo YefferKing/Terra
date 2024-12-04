@@ -1,0 +1,151 @@
+﻿@page "/404"
+<div class="container-fluid error-container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-6 text-center">
+            <div class="error-content">
+                <h1 class="display-1 fw-bold">Oops!</h1>
+                <div class="error-number position-relative">
+                    <h2 class="display-1 fw-bold">404</h2>
+                    <div class="gear-icons">
+                        <i class="bi bi-gear-fill gear-1"></i>
+                        <i class="bi bi-gear-fill gear-2"></i>
+                        <i class="bi bi-gear-fill gear-3"></i>
+                    </div>
+                </div>
+                
+                <!-- New image section -->
+                <div class="error-image-container">
+                    <img src="/img/404.png" alt="404 Not Found" class="img-fluid error-image" />
+                </div>
+                <a href="/Dashboard" class="btn btn-primary mt-3">Volver al Inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("/Dashboard");
+    }
+}
+<style>
+    .error-container {
+        background-color: #f8f9fa;
+        overflow: hidden;
+    }
+    .error-content {
+        padding: 2rem;
+    }
+    .error-number {
+        font-size: 8rem;
+        color: #2d3436;
+        margin: 1rem 0;
+    }
+    .error-image-container {
+        margin-bottom: 2rem;
+        max-height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .error-image {
+        max-width: 100%;
+        max-height: 300px;
+        object-fit: contain;
+    }
+    .gear-icons {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .gear-1, .gear-2, .gear-3 {
+        position: absolute;
+        color: #2d3436;
+        opacity: 0.2;
+    }
+    .gear-1 {
+        top: 10%;
+        left: 10%;
+        animation: spin 4s linear infinite;
+    }
+    .gear-2 {
+        top: 20%;
+        right: 15%;
+        animation: spin 4s linear infinite reverse;
+    }
+    .gear-3 {
+        bottom: 15%;
+        left: 20%;
+        animation: spin 4s linear infinite;
+    }
+    .robot {
+        width: 200px;
+        height: 250px;
+        margin: 2rem auto;
+        position: relative;
+    }
+    .robot-body {
+        background-color: #ffd32a;
+        width: 150px;
+        height: 180px;
+        margin: 0 auto;
+        border-radius: 15px;
+        position: relative;
+    }
+    .robot-head {
+        background-color: #ffd32a;
+        width: 100px;
+        height: 80px;
+        border-radius: 10px;
+        position: absolute;
+        top: -40px;
+        left: 25px;
+    }
+    .robot-eye {
+        background-color: #2d3436;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        position: absolute;
+        top: 20px;
+        left: 40px;
+    }
+    .robot-error-text {
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
+        font-size: 0.8rem;
+        color: #2d3436;
+    }
+    .robot-arms {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+    }
+    .robot-arm-left, .robot-arm-right {
+        background-color: #ffd32a;
+        width: 40px;
+        height: 15px;
+        position: absolute;
+    }
+    .robot-arm-left {
+        left: -35px;
+        transform: rotate(25deg);
+    }
+    .robot-arm-right {
+        right: -35px;
+        transform: rotate(-25deg);
+    }
+    keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>

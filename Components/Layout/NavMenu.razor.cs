@@ -11,7 +11,6 @@ namespace Terra.Components.Layout
         private IJSRuntime JSRuntime { get; set; }
 
         private bool showModalProfile = false;
-        private string CodSuc, userName, anio, token, _fotoUrlTerceroEmpresa, empresa;
 
         private void ToggleMenu()
         {
