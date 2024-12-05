@@ -1,0 +1,93 @@
+﻿@page "/Entradas"
+
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+@inherits LayoutComponentBase
+
+@using OperacionGrid = Terra.Models.Entradas.OperacionData;
+
+<PageTitle>Operacion</PageTitle>
+
+<GridComponent route="/Entradas" SearchMethod="OnKeyUpSearch">
+
+    <TableHeader>
+        <button class="btn btn-primary d-inline-flex align-items-center gap-2 insert-btn" @onclick='(()=> FormOperacion("0"))'>
+            <i class="bi bi-box-arrow-in-down"></i>
+            <span>Insertar</span>
+        </button>
+    </TableHeader>
+
+    <Table>
+        <Grid TItem="OperacionGrid"
+              Class="table rounded mt-2 custom-table-bootstrap"
+              Data="data"
+              Responsive="true"
+              AllowPaging="true"
+              AllowRowClick="true"
+              OnRowDoubleClick="OnRowDoubleClick"
+              PageSize="Constants.ElementosPorPagina"
+              EmptyText="No se encontraron registros.">
+
+            <GridColumn TItem="OperacionGrid" HeaderText="FECHA" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @Helpers.formatFecha(context.FECHA, "dd/MM/yyyy")
+            </GridColumn>
+
+            <GridColumn TItem="OperacionGrid" HeaderText="NUMERO" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.NUMERO
+            </GridColumn>
+
+            <GridColumn TItem="OperacionGrid" HeaderText="TIPO" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.TIPO
+            </GridColumn>
+
+            <GridColumn TItem="OperacionGrid" HeaderText="UBICACION" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.UBICACION
+            </GridColumn>
+
+            <GridColumn TItem="OperacionGrid" HeaderText="OBSERVACION" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.OBSERVACION
+            </GridColumn>
+
+
+            <GridColumn TItem="OperacionGrid" PropertyName="" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                <button class="border-0 bg-transparent" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <a @onclick="@(() => FormOperacion(context.OPERACIONID))" style='border-radius: .25rem;' class='dropdown-item'>
+                        <i class='bi bi-pencil-square'></i> Editar
+                    </a>
+
+                    <a @onclick="@(() => ShowConfirmDelete(context.OPERACIONID))" style='border-radius: .25rem;' class='dropdown-item'>
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                </div>
+            </GridColumn>
+
+        </Grid>
+    </Table>
+
+</GridComponent>
+
+<Modal @ref="confirmDelete" Title="Confirmar" IsVerticallyCentered="true">
+    <BodyTemplate>
+        <p class="fs-5">¿Desea eliminar el registro?</p>
+    </BodyTemplate>
+    <FooterTemplate>
+        <button @onclick="@(()=>Eliminar())" type="submit" class="btn btn-primary-custom text-light">Aceptar</button>
+        <button @onclick="confirmDelete.HideAsync" type="button" class="btn btn-danger">Cancelar</button>
+    </FooterTemplate>
+</Modal>
+
+
+<BlazoredToasts Position="Blazored.Toast.Configuration.ToastPosition.BottomCenter"
+                Timeout="5"
+                IconType="Blazored.Toast.Configuration.IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa fa-bug"
+                WarningIcon="fa fa-warning"
+                InfoIcon="fa fa-info-circle">
+</BlazoredToasts>
+
+<LoadingModal @ref="loadingModal" />

@@ -1,0 +1,169 @@
+﻿@page "/Entradas/{entradaId}"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inherits LayoutComponentBase
+@using HerramientasGrid = Terra.Models.Herramientas.HerramientaData
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Left side form -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <EditForm EditContext="editContextForm">
+                        <DataAnnotationsValidator />
+                        <div class="row g-2">
+                            <!-- Primera fila -->
+                            <div class="col-md-4 mb-3">
+                                <div class="form-floating">
+                                    <InputDate class="form-control"
+                                               @bind-Value="dataOperacionForm.FECHA" />
+                                    <label for="Fecha">Fecha</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <div class="form-floating">
+                                    <InputNumber class="form-control text-uppercase"
+                                                 name="numero"
+                                                 placeholder="numero"
+                                                 @bind-Value="dataOperacionForm.NUMERO"
+                                                 readonly>
+                                    </InputNumber>
+                                    <label for="numero">Numero</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-floating">
+                                    <InputSelect class="form-select" name="UBICACIONID"
+                                                 @bind-Value="dataOperacionForm.UBICACIONID" readonly>
+                                        <option selected disabled value="">Seleccione...</option>
+                                        @foreach (var ubicacion in dataSelectUbicacion)
+
+                                        {
+                                            <option value='@ubicacion.UBICACIONID'>@ubicacion.DESCRIPCION</option>
+                                        }
+                                    </InputSelect>
+                                    <label>Ubicacion</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-floating">
+                                    <InputSelect class="form-select" name="PERSONAID"
+                                                 @bind-Value="dataOperacionForm.PERSONAID">
+                                        <option selected disabled value="">Seleccione...</option>
+                                        @foreach (var persona in dataSelectPersona)
+
+                                        {
+                                            <option value='@persona.PERSONAID'>@persona.NOMBRES</option>
+                                        }
+                                    </InputSelect>
+                                    <label>Persona</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-floating">
+                                    <InputNumber class="form-control text-uppercase"
+                                                 name="flete"
+                                                 placeholder="flete"
+                                                 @bind-Value="dataOperacionForm.FLETE">
+                                    </InputNumber>
+                                    <label for="flete">Flete</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col-md-12 mb-3">
+                                <div class="form-floating">
+                                    <InputTextArea class="form-control text-uppercase"
+                                                   name="Observacion"
+                                                   placeholder="Observacion"
+                                                   @bind-Value="dataOperacionForm.OBSERVACION">
+                                    </InputTextArea>
+                                    <label for="Observacion">Observacion</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selected Tools Section -->
+                        <div class="row g-2">
+                            <div class="col-12">
+                                    @foreach (var tool in selectedTools)
+
+                                    {
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h5 class="card-title">@tool.CODIGO</h5>
+                                                    <h5 class="card-title">@tool.DESCRIPCION</h5>
+                                                    <button type="button" class="btn-close" @onclick="() => RemoveTool(tool)"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <InputNumber class="form-control"
+                                                             @bind-Value="tool.CANTIDAD"
+                                                             
+                                                             min="0" />
+                                                <label>Cantidad</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <InputNumber class="form-control"
+                                                             @bind-Value="tool.VALORCOMPRA"
+                                                             
+                                                             min="0" />
+                                                <label>Valor</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    }
+                            </div>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side tool list -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Herramientas</h5>
+                </div>
+                <div class="card-body">
+                    <GridComponent>
+                        <Table>
+                            <Grid TItem="HerramientasGrid"
+                                  Class="table rounded mt-2 custom-table-bootstrap"
+                                  Data="data"
+                                  Responsive="true"
+                                  AllowPaging="true"
+                                  AllowRowClick="true"
+                                  PageSize="Constants.ElementosPorPagina"
+                                  EmptyText="No se encontraron registros."
+                                  OnRowClick="OnToolSelect">
+
+                                <GridColumn TItem="HerramientasGrid" HeaderText="CODIGO" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                                    @context.CODIGO
+                                </GridColumn>
+
+                                <GridColumn TItem="HerramientasGrid" HeaderText="NOMBRE" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                                    @context.NOMBRE
+                                </GridColumn>
+
+                                <GridColumn TItem="HerramientasGrid" HeaderText="DESCRIPCION" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                                    @context.DESCRIPCION
+                                </GridColumn>
+                            </Grid>
+                        </Table>
+                    </GridComponent>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
