@@ -4,6 +4,9 @@ namespace Terra.Models.DeOperacion
 {
     public class DeOperacionData
     {
+        [JsonProperty("OPERACIONID")]
+        public string OPERACIONID { get; set; }
+
         [JsonProperty("DEOPERACIONID")]
         public string DEOPERACIONID { get; set; }
 

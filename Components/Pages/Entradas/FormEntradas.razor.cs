@@ -2,10 +2,14 @@
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Newtonsoft.Json;
+using System.Data;
 using Terra.Components.Layout.Components;
 using Terra.Dao.Herramientas;
+using Terra.Dao.Operacion;
 using Terra.Dao.Parametrizacion.Personas;
 using Terra.Dao.Ubicacion;
+using Terra.Models;
 using Terra.Models.DeOperacion;
 using Terra.Models.Entradas;
 using Terra.Models.Herramientas;
@@ -35,6 +39,9 @@ namespace Terra.Components.Pages.Entradas
         [Inject]
         private PersonaDao _personaDao { get; set; }
 
+        [Inject]
+        private OperacionDao _operacionDao { get; set; }
+
         List<HerramientaData> data = new List<HerramientaData>();
 
 
@@ -49,6 +56,10 @@ namespace Terra.Components.Pages.Entradas
         private List<PersonaData> dataSelectPersona = new List<PersonaData>();
 
         private List<DeOperacionData> selectedTools = new();
+
+        private LoadingModal loadingModal;
+
+        private bool isDisabled = true;
 
 
         protected override async void OnInitialized()
@@ -75,6 +86,17 @@ namespace Terra.Components.Pages.Entradas
             if (data?.Count() == 0)
                 _toast.ShowWarning("No se encontraron registros");
 
+            if (entradaId != "0")
+            {
+                dataOperacionInsert = await _operacionDao.GetDataOperacion(entradaId);
+                selectedTools = await _operacionDao.GetAllDeOperacion(entradaId);
+                dataOperacionForm = dataOperacionInsert;
+                editContextForm = new EditContext(dataOperacionForm);
+
+                StateHasChanged();
+
+            }
+
             StateHasChanged();
         }
 
@@ -88,14 +110,12 @@ namespace Terra.Components.Pages.Entradas
 
             {
 
-                // Create a new instance to avoid reference issues
-
                 var newTool = new DeOperacionData
 
                 {
 
                     HERRAMIENTAID = tool.HERRAMIENTAID,
-                    DESCRIPCION = tool.DESCRIPCION,
+                    DESCRIPCION = tool.NOMBRE,
                     CODIGO = tool.CODIGO,
                     CANTIDAD = 0,
                     VALORCOMPRA = 0
@@ -110,15 +130,132 @@ namespace Terra.Components.Pages.Entradas
         }
 
 
-
-        private void RemoveTool(DeOperacionData tool)
-
+        public bool ToolExists(string codigo)
         {
+            return selectedTools.Any(t => t.CODIGO == codigo);
+        }
 
-            selectedTools.RemoveAll(t => t.CODIGO == tool.CODIGO);
+        public void UpdateToolQuantity(string codigo, int cantidad)
+        {
+            var tool = selectedTools.FirstOrDefault(t => t.CODIGO == codigo);
+            if (tool != null)
+            {
+                tool.CANTIDAD = cantidad;
+            }
+        }
+
+        public void UpdateToolValue(string codigo, decimal valor)
+        {
+            var tool = selectedTools.FirstOrDefault(t => t.CODIGO == codigo);
+            if (tool != null)
+            {
+                tool.VALORCOMPRA = valor;
+            }
+        }
+
+        private async Task RemoveTool(DeOperacionData tool)
+        {
+            if (entradaId != "0")
+            {
+                await _operacionDao.EliminarDeOperacion(tool.DEOPERACIONID);
+                selectedTools = await _operacionDao.GetAllDeOperacion(entradaId) ?? new List<DeOperacionData>();
+            }
+            else
+            {
+                if (selectedTools == null)
+                {
+                    selectedTools = new List<DeOperacionData>();
+                }
+
+                selectedTools.RemoveAll(t => t.CODIGO == tool.CODIGO);
+            }
 
             StateHasChanged();
+        }
 
+
+
+        private async Task Guardar()
+        {
+
+            string tipoOperacion = "1";
+            dataOperacionInsert = dataOperacionForm;
+            dataOperacionInsert.TIPOOPERACIONID = tipoOperacion;
+
+            if (entradaId.Equals("0"))
+            {
+                JsonDataResult json = await _operacionDao.InsertarOperacion(dataOperacionInsert);
+
+                DataTable table = (DataTable)JsonConvert.DeserializeObject(json.CONTENIDO.ToString(), typeof(DataTable));
+
+                if (table == null || table.Rows.Count == 0)
+                    return;
+
+                int success = Convert.ToInt32(table.Rows[0]["OSUCCESS"].ToString());
+                string response = (string)table.Rows[0]["RESPONSE"];
+
+                if (success != 1)
+                {
+                    _toast.ShowWarning(response);
+                    return;
+                }
+
+                int Id = Convert.ToInt32(table.Rows[0]["VID"].ToString());
+
+                foreach (var row in selectedTools)
+                {
+                    DeOperacionData itemData = new DeOperacionData
+                    {
+                        OPERACIONID = Id.ToString(),
+                        HERRAMIENTAID = row.HERRAMIENTAID,
+                        CANTIDAD = row.CANTIDAD,
+                        VALORCOMPRA = row.VALORCOMPRA
+                    };
+                    JsonDataResult jsonItems = await _operacionDao.InsertarDeOperacion(itemData);
+                }
+
+                _toast.ShowSuccess(response);
+                _navigationManager.NavigateTo("/Entradas");
+                return;
+            }
+            else
+            {
+
+                JsonDataResult json = await _operacionDao.ActualizarOperacion(dataOperacionInsert);
+
+                DataTable table = (DataTable)JsonConvert.DeserializeObject(json.CONTENIDO.ToString(), typeof(DataTable));
+
+                if (table == null || table.Rows.Count == 0)
+                    return;
+
+                int success = Convert.ToInt32(table.Rows[0]["OSUCCESS"].ToString());
+                string response = (string)table.Rows[0]["RESPONSE"];
+
+                if (success != 1)
+                {
+                    _toast.ShowWarning(response);
+                    loadingModal.Hide();
+                    return;
+                }
+
+
+                foreach (var row in selectedTools)
+                {
+                    DeOperacionData itemData = new DeOperacionData
+                    {
+                        OPERACIONID = dataOperacionForm.OPERACIONID.ToString(),
+                        HERRAMIENTAID = row.HERRAMIENTAID,
+                        CANTIDAD = row.CANTIDAD,
+                        VALORCOMPRA = row.VALORCOMPRA
+                    };
+                    JsonDataResult jsonItems = await _operacionDao.InsertarDeOperacion(itemData);
+                }
+
+                _toast.ShowSuccess(response);
+                loadingModal.Hide();
+                _navigationManager.NavigateTo("/Entradas");
+                return;
+            }
         }
     }
 }
