@@ -89,7 +89,7 @@ namespace Terra.Components.Pages.Entradas
             if (entradaId != "0")
             {
                 dataOperacionInsert = await _operacionDao.GetDataOperacion(entradaId);
-                selectedTools = await _operacionDao.GetAllDeOperacion(entradaId);
+                selectedTools = await _operacionDao.GetAllDeOperacion(entradaId) ?? new List<DeOperacionData>();
                 dataOperacionForm = dataOperacionInsert;
                 editContextForm = new EditContext(dataOperacionForm);
 
