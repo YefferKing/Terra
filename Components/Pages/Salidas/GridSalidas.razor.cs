@@ -1,16 +1,13 @@
 ﻿using BlazorBootstrap;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
-using Terra.Commons;
 using Terra.Components.Layout.Components;
-using Terra.Dao.Herramientas;
 using Terra.Dao.Operacion;
 using Terra.Models.Entradas;
-using Terra.Models.Herramientas;
 
-namespace Terra.Components.Pages.Entradas
+namespace Terra.Components.Pages.Salidas
 {
-    public partial class GridEntradas
+    public partial class GridSalidas
     {
         [Inject]
         private IToastService _toast { get; set; }
@@ -46,7 +43,7 @@ namespace Terra.Components.Pages.Entradas
             var allData = await _operacionDao.GetAllOperacion();
 
             // Filtrar solo los datos con TIPOOPERACIONID igual a 1
-            data = allData?.Where(d => d.TIPOOPERACIONID == "1").ToList();
+            data = allData?.Where(d => d.TIPOOPERACIONID == "2").ToList();
 
             if (data == null || !data.Any())
                 _toast.ShowWarning("No se encontraron registros");
@@ -56,10 +53,9 @@ namespace Terra.Components.Pages.Entradas
             StateHasChanged();
         }
 
-
         private async Task FormOperacion(string Id = "0")
         {
-            _navigationManager.NavigateTo($"/Entradas/{Id}");
+            _navigationManager.NavigateTo($"/Salidas/{Id}");
         }
 
         public async void OnKeyUpSearch(string textFilter)

@@ -5,6 +5,8 @@ using Terra.Dao.Parametrizacion.Personas;
 using Terra.Components.Layout.Components;
 using BlazorBootstrap;
 using Terra.Commons;
+using Terra.Models.Herramientas;
+using Terra.Dao.Herramientas;
 
 namespace Terra.Components.Pages.Parametrizacion.Personas
 {
@@ -21,6 +23,8 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
 
 
         List<PersonaData> data = new List<PersonaData>();
+
+        List<PersonaData> dataDB = new List<PersonaData>();
 
         private LoadingModal loadingModal;
         private Modal confirmDelete;
@@ -40,7 +44,7 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
         {
             loadingModal.Show();
 
-            data = await _personaDao.GetAllPersonas();
+            data = await _personaDao.GetAllPersonas("");
 
             if (data?.Count() == 0)
                 _toast.ShowWarning("No se encontraron registros");
@@ -85,6 +89,21 @@ namespace Terra.Components.Pages.Parametrizacion.Personas
 
             StateHasChanged();
 
+        }
+
+        public async void OnKeyUpSearch(string textFilter)
+        {
+
+            dataDB = await _personaDao.GetAllPersonas(textFilter);
+
+            if (dataDB != null && dataDB.Count > 0)
+                data = dataDB.AsQueryable().ToList();
+            else
+                _toast.ShowWarning("No se encontraron registros");
+
+            textFilter = "";
+
+            StateHasChanged();
         }
     }
 }

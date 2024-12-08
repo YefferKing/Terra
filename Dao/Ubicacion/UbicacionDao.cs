@@ -16,10 +16,10 @@ namespace Terra.Dao.Ubicacion
             _dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
         }
 
-        public async Task<List<UbicacionData>> GetAllUbicacion()
+        public async Task<List<UbicacionData>> GetAllUbicacion(string filtro="")
         {
 
-            string query = $"CALL UBICACION_LIST()";
+            string query = $"CALL UBICACION_LIST('{filtro}')";
 
             JsonDataResult response = _dbConnection.TERRA_QTConsulta(query);
 

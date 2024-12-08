@@ -101,7 +101,7 @@ namespace Terra.Dao.Operacion
         {
 
 
-            string query = $"CALL OPERACION_UPDATE('{operacion.OPERACIONID}','{operacion.TIPOOPERACIONID}','{operacion.FECHA}','{operacion.NUMERO}','{operacion.UBICACIONID}','{operacion.PERSONAID}','{operacion.OBSERVACION}','{operacion.FLETE}')";
+            string query = $"CALL OPERACION_UPDATE('{operacion.OPERACIONID}','{operacion.TIPOOPERACIONID}','{Helpers.formatFecha(operacion.FECHA, "yyyy/MM/dd")}','{operacion.NUMERO}','{operacion.UBICACIONID}','{operacion.PERSONAID}','{operacion.OBSERVACION}','{operacion.FLETE}')";
 
             JsonDataResult json = _dbConnection.TERRA_QTConsulta(query);
 

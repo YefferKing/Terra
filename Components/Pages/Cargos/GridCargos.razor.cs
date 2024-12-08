@@ -2,6 +2,7 @@
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Terra.Components.Layout.Components;
+using Terra.Dao.Operacion;
 using Terra.Dao.Parametrizacion.Cargos;
 using Terra.Dao.Ubicacion;
 using Terra.Models.Parametrizacion.Cargos;
@@ -21,6 +22,8 @@ namespace Terra.Components.Pages.Cargos
         private CargoDao _cargoDao { get; set; }
 
         List<CargoData> data = new List<CargoData>();
+
+        List<CargoData> dataDB = new List<CargoData>();
 
         private LoadingModal loadingModal;
         private Modal confirmDelete;
@@ -85,6 +88,24 @@ namespace Terra.Components.Pages.Cargos
 
             StateHasChanged();
 
+        }
+
+        public async void OnKeyUpSearch(string textFilter)
+        {
+            loadingModal.Hide();
+
+            dataDB = await _cargoDao.GetAllCargos(textFilter);
+
+            if (dataDB != null && dataDB.Count > 0)
+                data = dataDB.AsQueryable().ToList();
+            else
+                _toast.ShowWarning("No se encontraron registros");
+
+            textFilter = "";
+
+            loadingModal.Hide();
+
+            StateHasChanged();
         }
     }
 }

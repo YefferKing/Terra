@@ -1,24 +1,24 @@
-﻿@page "/Herramientas"
+﻿@page "/Salidas"
 
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 @inherits LayoutComponentBase
 
-@using HerramientasGrid = Terra.Models.Herramientas.HerramientaData;
+@using OperacionGrid = Terra.Models.Entradas.OperacionData;
 
-<PageTitle>Herramientas</PageTitle>
+<PageTitle>Operacion</PageTitle>
 
-<GridComponent route="/Herramientas" SearchMethod="OnKeyUpSearch">
+<GridComponent route="/Salidas" MostrarSearchComponent="false" SearchMethod="OnKeyUpSearch">
 
     <TableHeader>
-        <button class="btn btn-primary d-inline-flex align-items-center gap-2 insert-btn" @onclick='(()=> FormHerramienta("0"))'>
-            <i class="bi bi-wrench-adjustable-circle"></i>
+        <button class="btn btn-primary d-inline-flex align-items-center gap-2 insert-btn" @onclick='(()=> FormOperacion("0"))'>
+            <i class="bi bi-box-arrow-in-down"></i>
             <span>Insertar</span>
         </button>
     </TableHeader>
 
     <Table>
-        <Grid TItem="HerramientasGrid"
+        <Grid TItem="OperacionGrid"
               Class="table rounded mt-2 custom-table-bootstrap"
               Data="data"
               Responsive="true"
@@ -28,29 +28,37 @@
               PageSize="Constants.ElementosPorPagina"
               EmptyText="No se encontraron registros.">
 
-            <GridColumn TItem="HerramientasGrid" HeaderText="CODIGO" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
-                @context.CODIGO
+            <GridColumn TItem="OperacionGrid" HeaderText="FECHA" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @Helpers.formatFecha(context.FECHA, "dd/MM/yyyy")
             </GridColumn>
 
-            <GridColumn TItem="HerramientasGrid" HeaderText="NOMBRE" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
-                @context.NOMBRE
+            <GridColumn TItem="OperacionGrid" HeaderText="NUMERO" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.NUMERO
             </GridColumn>
 
-            <GridColumn TItem="HerramientasGrid" HeaderText="DESCRIPCION" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
-                @context.DESCRIPCION
+            <GridColumn TItem="OperacionGrid" HeaderText="TIPO" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.TIPO
+            </GridColumn>
+
+            <GridColumn TItem="OperacionGrid" HeaderText="UBICACION" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.UBICACION
+            </GridColumn>
+
+            <GridColumn TItem="OperacionGrid" HeaderText="OBSERVACION" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                @context.OBSERVACION
             </GridColumn>
 
 
-            <GridColumn TItem="HerramientasGrid" PropertyName="" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+            <GridColumn TItem="OperacionGrid" PropertyName="" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
                 <button class="border-0 bg-transparent" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bi bi-three-dots"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <a @onclick="@(() => FormHerramienta(context.HERRAMIENTAID))" style='border-radius: .25rem;' class='dropdown-item'>
+                    <a @onclick="@(() => FormOperacion(context.OPERACIONID))" style='border-radius: .25rem;' class='dropdown-item'>
                         <i class='bi bi-pencil-square'></i> Editar
                     </a>
 
-                    <a @onclick="@(() => ShowConfirmDelete(context.HERRAMIENTAID))" style='border-radius: .25rem;' class='dropdown-item'>
+                    <a @onclick="@(() => ShowConfirmDelete(context.OPERACIONID))" style='border-radius: .25rem;' class='dropdown-item'>
                         <i class="bi bi-trash"></i> Eliminar
                     </a>
                 </div>

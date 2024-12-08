@@ -16,10 +16,10 @@ namespace Terra.Dao.Herramientas
             _dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
         }
 
-        public async Task<List<HerramientaData>> GetAllHerramientas()
+        public async Task<List<HerramientaData>> GetAllHerramientas(string filtro = "")
         {
 
-            string query = $"CALL HERRAMIENTAS_LIST()";
+            string query = $"CALL HERRAMIENTAS_LIST('{filtro}')";
 
             JsonDataResult response = _dbConnection.TERRA_QTConsulta(query);
 

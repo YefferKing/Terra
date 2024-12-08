@@ -15,10 +15,10 @@ namespace Terra.Dao.Parametrizacion.Personas
             _dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
         }
 
-        public async Task<List<PersonaData>> GetAllPersonas()
+        public async Task<List<PersonaData>> GetAllPersonas(string filtro = "")
         {
 
-            string query = $"CALL PERSONA_LIST()";
+            string query = $"CALL PERSONA_LIST('{filtro}')";
 
             JsonDataResult response =  _dbConnection.TERRA_QTConsulta(query);
 

@@ -6,6 +6,7 @@ using Terra.Models.Herramientas;
 using BlazorBootstrap;
 using Terra.Dao.Parametrizacion.Personas;
 using Terra.Models.Parametrizacion.Personas;
+using Terra.Dao.Parametrizacion.Cargos;
 
 namespace Terra.Components.Pages.Herramientas
 {
@@ -21,6 +22,8 @@ namespace Terra.Components.Pages.Herramientas
         private HerramientaDao _herramientaDao { get; set; }
 
         List<HerramientaData> data = new List<HerramientaData>();
+
+        List<HerramientaData> dataDB = new List<HerramientaData>();
 
         private LoadingModal loadingModal;
         private Modal confirmDelete;
@@ -85,6 +88,24 @@ namespace Terra.Components.Pages.Herramientas
 
             StateHasChanged();
 
+        }
+
+        public async void OnKeyUpSearch(string textFilter)
+        {
+            loadingModal.Hide();
+
+            dataDB = await _herramientaDao.GetAllHerramientas(textFilter);
+
+            if (dataDB != null && dataDB.Count > 0)
+                data = dataDB.AsQueryable().ToList();
+            else
+                _toast.ShowWarning("No se encontraron registros");
+
+            textFilter = "";
+
+            loadingModal.Hide();
+
+            StateHasChanged();
         }
     }
 }

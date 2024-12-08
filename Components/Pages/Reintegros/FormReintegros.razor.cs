@@ -17,9 +17,9 @@ using Terra.Models.Parametrizacion.GrupoSanguineo;
 using Terra.Models.Parametrizacion.Personas;
 using Terra.Models.Ubicacion;
 
-namespace Terra.Components.Pages.Entradas
+namespace Terra.Components.Pages.Reintegros
 {
-    public partial class FormEntradas
+    public partial class FormReintegros
     {
         [Inject]
         private HerramientaDao _herramientaDao { get; set; }
@@ -28,7 +28,7 @@ namespace Terra.Components.Pages.Entradas
         private IToastService _toast { get; set; }
 
         [Parameter]
-        public string entradaId { get; set; }
+        public string reintegroId { get; set; }
 
         [Inject]
         private NavigationManager _navigationManager { get; set; }
@@ -68,11 +68,6 @@ namespace Terra.Components.Pages.Entradas
         {
             editContextForm = new EditContext(dataOperacionForm);
             dataSelectUbicacion = await _ubicacionDao.GetAllUbicacion();
-            var selectedUbicacion = dataSelectUbicacion.FirstOrDefault(u => u.UBICACIONID == "1");
-            if (selectedUbicacion != null)
-            {
-                dataOperacionForm.UBICACIONID = selectedUbicacion.UBICACIONID; // Asignar a la propiedad del formulario
-            }
             dataSelectPersona = await _personaDao.GetAllPersonas();
         }
 
@@ -93,10 +88,10 @@ namespace Terra.Components.Pages.Entradas
             if (data?.Count() == 0)
                 _toast.ShowWarning("No se encontraron registros");
 
-            if (entradaId != "0")
+            if (reintegroId != "0")
             {
-                dataOperacionInsert = await _operacionDao.GetDataOperacion(entradaId);
-                selectedTools = await _operacionDao.GetAllDeOperacion(entradaId) ?? new List<DeOperacionData>();
+                dataOperacionInsert = await _operacionDao.GetDataOperacion(reintegroId);
+                selectedTools = await _operacionDao.GetAllDeOperacion(reintegroId) ?? new List<DeOperacionData>();
                 dataOperacionForm = dataOperacionInsert;
                 editContextForm = new EditContext(dataOperacionForm);
 
@@ -162,10 +157,10 @@ namespace Terra.Components.Pages.Entradas
 
         private async Task RemoveTool(DeOperacionData tool)
         {
-            if (entradaId != "0")
+            if (reintegroId != "0")
             {
                 await _operacionDao.EliminarDeOperacion(tool.DEOPERACIONID);
-                selectedTools = await _operacionDao.GetAllDeOperacion(entradaId) ?? new List<DeOperacionData>();
+                selectedTools = await _operacionDao.GetAllDeOperacion(reintegroId) ?? new List<DeOperacionData>();
             }
             else
             {
@@ -179,16 +174,29 @@ namespace Terra.Components.Pages.Entradas
 
             StateHasChanged();
         }
-         
 
+        public async void OnKeyUpSearch(string textFilter)
+        {
+
+            dataDB = await _herramientaDao.GetAllHerramientas(textFilter);
+
+            if (dataDB != null && dataDB.Count > 0)
+                data = dataDB.AsQueryable().ToList();
+            else
+                _toast.ShowWarning("No se encontraron registros");
+
+            textFilter = "";
+
+            StateHasChanged();
+        }
         private async Task Guardar()
         {
 
-            string tipoOperacion = "1";
+            string tipoOperacion = "3";
             dataOperacionInsert = dataOperacionForm;
             dataOperacionInsert.TIPOOPERACIONID = tipoOperacion;
 
-            if (entradaId.Equals("0"))
+            if (reintegroId.Equals("0"))
             {
                 JsonDataResult json = await _operacionDao.InsertarOperacion(dataOperacionInsert);
 
@@ -221,7 +229,7 @@ namespace Terra.Components.Pages.Entradas
                 }
 
                 _toast.ShowSuccess(response);
-                _navigationManager.NavigateTo("/Entradas");
+                _navigationManager.NavigateTo("/Reintegros");
                 return;
             }
             else
@@ -258,24 +266,9 @@ namespace Terra.Components.Pages.Entradas
                 }
 
                 _toast.ShowSuccess(response);
-                _navigationManager.NavigateTo("/Entradas");
+                _navigationManager.NavigateTo("/Reintegros");
                 return;
             }
-        }
-
-        public async void OnKeyUpSearch(string textFilter)
-        {
-
-            dataDB = await _herramientaDao.GetAllHerramientas(textFilter);
-
-            if (dataDB != null && dataDB.Count > 0)
-                data = dataDB.AsQueryable().ToList();
-            else
-                _toast.ShowWarning("No se encontraron registros");
-
-            textFilter = "";
-
-            StateHasChanged();
         }
     }
 }

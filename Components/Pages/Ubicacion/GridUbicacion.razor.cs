@@ -22,6 +22,8 @@ namespace Terra.Components.Pages.Ubicacion
 
         List<UbicacionData> data = new List<UbicacionData>();
 
+        List<UbicacionData> dataDB = new List<UbicacionData>();
+
         private LoadingModal loadingModal;
         private Modal confirmDelete;
         private string SelectId;
@@ -40,7 +42,7 @@ namespace Terra.Components.Pages.Ubicacion
         {
             loadingModal.Show();
 
-            data = await _ubicacionDao.GetAllUbicacion();
+            data = await _ubicacionDao.GetAllUbicacion("");
 
             if (data?.Count() == 0)
                 _toast.ShowWarning("No se encontraron registros");
@@ -85,6 +87,21 @@ namespace Terra.Components.Pages.Ubicacion
 
             StateHasChanged();
 
+        }
+
+        public async void OnKeyUpSearch(string textFilter)
+        {
+
+            dataDB = await _ubicacionDao.GetAllUbicacion(textFilter);
+
+            if (dataDB != null && dataDB.Count > 0)
+                data = dataDB.AsQueryable().ToList();
+            else
+                _toast.ShowWarning("No se encontraron registros");
+
+            textFilter = "";
+
+            StateHasChanged();
         }
     }
 }

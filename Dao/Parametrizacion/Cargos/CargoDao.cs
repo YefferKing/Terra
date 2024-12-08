@@ -17,10 +17,10 @@ namespace Terra.Dao.Parametrizacion.Cargos
             _dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
         }
 
-        public async Task<List<CargoData>> GetAllCargos()
+        public async Task<List<CargoData>> GetAllCargos(string filtro="")
         {
 
-            string query = $"CALL CARGOS_LIST()";
+            string query = $"CALL CARGOS_LIST('{filtro}')";
 
             JsonDataResult response = _dbConnection.TERRA_QTConsulta(query);
 
